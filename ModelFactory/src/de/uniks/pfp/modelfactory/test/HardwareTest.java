@@ -5,6 +5,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import de.uniks.pfp.modelfactory.hardware.LocalBrick;
+import de.uniks.pfp.modelfactory.hardware.OurMotor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RemoteEV3;
 
@@ -26,9 +27,16 @@ public class HardwareTest {
 		if (brick != null)
 			System.out.println("Init successful");
 		
-		// LocalBrick test = new LocalBrick(ip);
-
+		LocalBrick test = new LocalBrick(ip);
+		
+		
 		RMIRegulatedMotor m1 = brick.createRegulatedMotor("A", 'L');
+		OurMotor om1 = new OurMotor(m1, "A", 'L');
+		OurMotor om2 = new OurMotor(m1, "A", 'L');
+		test.createMotor("A", om1);
+		test.createMotor("A", om2);
+		
+		
 		try {
 			m1.rotate(200);
 		} catch (RemoteException e) {
@@ -44,6 +52,7 @@ public class HardwareTest {
 			e.printStackTrace();
 		}
 		
+		test.close();
 	}
 
 }

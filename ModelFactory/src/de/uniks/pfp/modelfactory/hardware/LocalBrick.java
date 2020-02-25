@@ -15,10 +15,10 @@ public class LocalBrick {
 	Boolean initialized = false;
 	
 	// The brick has 4 ports for engines addressed by a letter (= Character) and 4 ports for sensors addressed by a number (= Integer)
-	ArrayList <Port<Character, OurMotor>> engines = new ArrayList<>();
+	ArrayList <Port<String, OurMotor>> engines = new ArrayList<>();
 	ArrayList <Port<Integer, Sensor>> sensors = new ArrayList<>();
 	
-	static Character [] enginePorts = {'A', 'B', 'C', 'D'};
+	static String [] enginePorts = {"A", "B", "C", "D"};
 	static Integer [] sensorPorts = {1, 2, 3, 4}; 
 	
 
@@ -63,8 +63,8 @@ public class LocalBrick {
 	}
 
 	private void init() {
-		for (Character port : enginePorts) {
-			Port<Character, OurMotor> p = new Port<>();
+		for (String port : enginePorts) {
+			Port<String, OurMotor> p = new Port<>();
 			p.setPortName(port);
 			p.setHardware(null);
 			engines.add(p);
@@ -78,42 +78,37 @@ public class LocalBrick {
 		}
 	}
 	
-	public boolean motorPortAvailable(Character port) {
-		boolean result = false;
-		for (Port<Character, OurMotor> p : engines) 
-			if (p.getPortName().equals(port))
-				if (p.getHardware() == null)
-					result = true;
-		return result;
-	}
-	
-	public OurMotor getMotorAtPort(Character port) {
+	public OurMotor getMotorAtPort(String port) {
 		OurMotor motor = null;
-		for (Port<Character, OurMotor> p : engines) 
+		for (Port<String, OurMotor> p : engines) 
 			if (p.getPortName().equals(port))
 				motor = p.getHardware();
 		return motor;
 	}
 
-	public boolean sensorPortAvailable(Integer port) {
-		boolean result = false;
+	public Sensor getSensorAtPort(Integer port) {
+		Sensor sensor = null;
 		for (Port<Integer, Sensor> p : sensors) 
 			if (p.getPortName().equals(port))
-				if (p.getHardware() == null)
-					result = true;
-		return result;
+				sensor = p.getHardware();
+		return sensor;
 	}
 	
-	public void createMotor(Character port, OurMotor newMotor) {
+	public void createMotor(String port, OurMotor newMotor) {
+		
+		System.out.println("Creating new motor.");
 		
 		if (initialized && newMotor != null) {
 			
 			// We check for an old motor on port. If there is one, we close it.
 			OurMotor oldMotor;
-			if ((oldMotor = getMotorAtPort(port)) != null) 
+			if ((oldMotor = getMotorAtPort(port)) != null)  {
 				oldMotor.close();
+				System.out.println("Had to close old motor");
+			}
+				
 
-			for (Port<Character, OurMotor> p : engines)
+			for (Port<String, OurMotor> p : engines)
 				if (p.getPortName().equals(port))
 					p.setHardware(newMotor);
 			
@@ -123,6 +118,28 @@ public class LocalBrick {
 	
 	}
 	
-	
+	public void close() {
+		closeSensors();
+		closeEngines();
+	}
+
+	private void closeEngines() {
+		// TODO Auto-generated method stub
+		for (Port<String, OurMotor> p : engines) {
+			OurMotor currentMotor;
+			if ((currentMotor = p.getHardware()) != null)
+				p.getHardware().close();
+		}
+			
+	}
+
+	private void closeSensors() {
+		// TODO Auto-generated method stub
+		for (Port<Integer, Sensor> p : sensors) {
+			Sensor currentSensor;
+			if ((currentSensor = p.getHardware()) != null)
+				p.getHardware().close();
+		}
+	}
 	
 }
