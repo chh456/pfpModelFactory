@@ -4,13 +4,13 @@ import java.rmi.RemoteException;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
 
-public class OurMotor {
+public class PFPMotor {
 
 	RMIRegulatedMotor motor; 
 	Character type; // Large or medium
 	String port;
 	
-	public OurMotor(RMIRegulatedMotor m, String port, Character type) {
+	public PFPMotor(RMIRegulatedMotor m, String port, Character type) {
 		motor = m;
 		this.type = type;
 		this.port = port;

@@ -1,6 +1,6 @@
 package de.uniks.pfp.modelfactory.hardware;
 
-public class Sensor {
+public class PFPSensor {
 
 	public void close() {
 		// TODO Auto-generated method stub

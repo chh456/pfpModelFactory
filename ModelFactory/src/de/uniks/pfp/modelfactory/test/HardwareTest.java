@@ -4,8 +4,8 @@ import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
-import de.uniks.pfp.modelfactory.hardware.LocalBrick;
-import de.uniks.pfp.modelfactory.hardware.OurMotor;
+import de.uniks.pfp.modelfactory.hardware.PFPBrick;
+import de.uniks.pfp.modelfactory.hardware.PFPMotor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RemoteEV3;
 
@@ -27,12 +27,12 @@ public class HardwareTest {
 		if (brick != null)
 			System.out.println("Init successful");
 		
-		LocalBrick test = new LocalBrick(ip);
+		PFPBrick test = new PFPBrick(ip);
 		
 		
 		RMIRegulatedMotor m1 = brick.createRegulatedMotor("A", 'L');
-		OurMotor om1 = new OurMotor(m1, "A", 'L');
-		OurMotor om2 = new OurMotor(m1, "A", 'L');
+		PFPMotor om1 = new PFPMotor(m1, "A", 'L');
+		PFPMotor om2 = new PFPMotor(m1, "A", 'L');
 		test.createMotor("A", om1);
 		test.createMotor("A", om2);
 		

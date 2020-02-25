@@ -8,15 +8,15 @@ import java.util.ArrayList;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RemoteEV3;
 
-public class LocalBrick {
+public class PFPBrick {
 
 	String ip;
 	RemoteEV3 brick = null;
 	Boolean initialized = false;
 	
 	// The brick has 4 ports for engines addressed by a letter (= Character) and 4 ports for sensors addressed by a number (= Integer)
-	ArrayList <Port<String, OurMotor>> engines = new ArrayList<>();
-	ArrayList <Port<Integer, Sensor>> sensors = new ArrayList<>();
+	ArrayList <Port<String, PFPMotor>> engines = new ArrayList<>();
+	ArrayList <Port<Integer, PFPSensor>> sensors = new ArrayList<>();
 	
 	static String [] enginePorts = {"A", "B", "C", "D"};
 	static Integer [] sensorPorts = {1, 2, 3, 4}; 
@@ -43,7 +43,7 @@ public class LocalBrick {
 		}
 	}
 	
-	public LocalBrick(String ip) {
+	public PFPBrick(String ip) {
 		this.ip = ip;
 		
 		try {
@@ -64,51 +64,51 @@ public class LocalBrick {
 
 	private void init() {
 		for (String port : enginePorts) {
-			Port<String, OurMotor> p = new Port<>();
+			Port<String, PFPMotor> p = new Port<>();
 			p.setPortName(port);
 			p.setHardware(null);
 			engines.add(p);
 		}
 		
 		for (Integer port : sensorPorts) {
-			Port<Integer, Sensor> p = new Port<>();
+			Port<Integer, PFPSensor> p = new Port<>();
 			p.setPortName(port);
 			p.setHardware(null);
 			sensors.add(p);
 		}
 	}
 	
-	public OurMotor getMotorAtPort(String port) {
-		OurMotor motor = null;
-		for (Port<String, OurMotor> p : engines) 
+	public PFPMotor getMotorAtPort(String port) {
+		PFPMotor motor = null;
+		for (Port<String, PFPMotor> p : engines) 
 			if (p.getPortName().equals(port))
 				motor = p.getHardware();
 		return motor;
 	}
 
-	public Sensor getSensorAtPort(Integer port) {
-		Sensor sensor = null;
-		for (Port<Integer, Sensor> p : sensors) 
+	public PFPSensor getSensorAtPort(Integer port) {
+		PFPSensor sensor = null;
+		for (Port<Integer, PFPSensor> p : sensors) 
 			if (p.getPortName().equals(port))
 				sensor = p.getHardware();
 		return sensor;
 	}
 	
-	public void createMotor(String port, OurMotor newMotor) {
+	public void createMotor(String port, PFPMotor newMotor) {
 		
 		System.out.println("Creating new motor.");
 		
 		if (initialized && newMotor != null) {
 			
 			// We check for an old motor on port. If there is one, we close it.
-			OurMotor oldMotor;
+			PFPMotor oldMotor;
 			if ((oldMotor = getMotorAtPort(port)) != null)  {
 				oldMotor.close();
 				System.out.println("Had to close old motor");
 			}
 				
 
-			for (Port<String, OurMotor> p : engines)
+			for (Port<String, PFPMotor> p : engines)
 				if (p.getPortName().equals(port))
 					p.setHardware(newMotor);
 			
@@ -125,8 +125,8 @@ public class LocalBrick {
 
 	private void closeEngines() {
 		// TODO Auto-generated method stub
-		for (Port<String, OurMotor> p : engines) {
-			OurMotor currentMotor;
+		for (Port<String, PFPMotor> p : engines) {
+			PFPMotor currentMotor;
 			if ((currentMotor = p.getHardware()) != null)
 				p.getHardware().close();
 		}
@@ -135,8 +135,8 @@ public class LocalBrick {
 
 	private void closeSensors() {
 		// TODO Auto-generated method stub
-		for (Port<Integer, Sensor> p : sensors) {
-			Sensor currentSensor;
+		for (Port<Integer, PFPSensor> p : sensors) {
+			PFPSensor currentSensor;
 			if ((currentSensor = p.getHardware()) != null)
 				p.getHardware().close();
 		}
