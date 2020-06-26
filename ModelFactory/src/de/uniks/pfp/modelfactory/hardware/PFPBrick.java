@@ -138,7 +138,8 @@ public class PFPBrick {
 		for (Port<Integer, PFPSensor> p : sensors) {
 			PFPSensor currentSensor;
 			if ((currentSensor = p.getHardware()) != null)
-				p.getHardware().close();
+				System.out.println("TODO");
+				//p.getHardware().close();
 		}
 	}
 	
